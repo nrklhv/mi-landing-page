@@ -47,7 +47,7 @@ export default function App() {
             <div>
               <p className="text-amber-400 text-sm font-semibold tracking-widest mb-4">WELCOME TO</p>
               <h1 className="text-6xl lg:text-7xl font-black leading-tight tracking-tight">
-                Crafted for
+                PRUEBA for
                 <br />
                 <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">excellence</span>
               </h1>
