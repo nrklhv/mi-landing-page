@@ -1,64 +1,65 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Check, MapPin, Phone, Mail, Menu, X } from 'lucide-react';
+import { ArrowRight, Check, MapPin, Phone, Mail, Menu, X, Home, Building2, ShoppingBag, Landmark } from 'lucide-react';
 
 const navLinks = [
-  { href: '#masterplan', label: 'Masterplan' },
-  { href: '#residencial', label: 'Residencial' },
-  { href: '#contacto', label: 'Contacto' },
+  { href: '#vision', label: 'VISION' },
+  { href: '#ecosystem', label: 'ECOSYSTEM' },
+  { href: '#lifestyle', label: 'LIFESTYLE' },
+  { href: '#contact', label: 'CONTACT' },
 ];
 
-const torres = [
-  {
-    name: 'VILA PREMIUM',
-    desc: 'Apartamentos de lujo con acabados de primera línea y vistas panorámicas.',
-    hab: '2-4 dormitorios',
-    desde: 'UF 3.200',
-    accent: 'forest',
-  },
-  {
-    name: 'VILA SMART',
-    desc: 'Apartamentos modernos con tecnología inteligente y diseño funcional.',
-    hab: '1-3 dormitorios',
-    desde: 'UF 2.100',
-    accent: 'navy',
-  },
-  {
-    name: 'VILA VERDE',
-    desc: 'Apartamentos eco-friendly con certificación sustentable y áreas verdes.',
-    hab: '2-3 dormitorios',
-    desde: 'UF 2.650',
-    accent: 'forest',
-  },
+const stats = [
+  { value: '250K', label: 'SQUARE METERS' },
+  { value: '12', label: 'TOWERS' },
+  { value: '4', label: 'PUBLIC PLAZAS' },
+  { value: '∞', label: 'POSSIBILITIES' },
 ];
 
-const amenidades = [
-  { icon: '🏋️', title: 'Gym de clase mundial', desc: 'Equipamiento premium' },
-  { icon: '🏊', title: 'Piscina infinity', desc: 'Vistas panorámicas' },
-  { icon: '💻', title: 'Coworking', desc: 'Espacios de trabajo' },
-  { icon: '🌿', title: 'Áreas verdes', desc: 'Parques y jardines' },
-  { icon: '🛡️', title: 'Seguridad 24/7', desc: 'Control de acceso' },
-  { icon: '🅿️', title: 'Parqueadero automatizado', desc: 'Estacionamiento seguro' },
-  { icon: '🛋️', title: 'Lounge', desc: 'Área de esparcimiento' },
-  { icon: '☀️', title: 'Terraza', desc: 'Zona BBQ y eventos' },
+const strategicItems = [
+  { title: 'Metro Connected', desc: 'Direct access to Santiago\'s expanding transit network' },
+  { title: 'Pedestrian Priority', desc: 'Streets designed for people, not cars' },
+  { title: 'Green Corridors', desc: '40% of the masterplan dedicated to landscape' },
+  { title: 'Smart Infrastructure', desc: 'Future-ready systems for sustainable urban life' },
 ];
 
-const consultaOptions = [
-  { value: '', label: 'Seleccione tipo de consulta' },
-  { value: 'pre-venta', label: 'Pre-venta' },
-  { value: 'consulta-general', label: 'Consulta general' },
-  { value: 'agendar-cita', label: 'Agendar cita' },
+const ecosystemItems = [
+  { icon: Home, title: 'Residential', desc: 'From intimate apartments to expansive penthouses, residences crafted for those who demand the exceptional.' },
+  { icon: Building2, title: 'Class A Offices', desc: 'Workspaces that inspire. Headquarters designed for companies shaping tomorrow\'s industries.' },
+  { icon: ShoppingBag, title: 'Experiential Retail', desc: 'Not shopping, but discovery. A curated collection of brands, artisans, and experiences.' },
+  { icon: Landmark, title: 'Cultural Anchor', desc: 'Art, performance, gathering. Public spaces that pulse with the city\'s creative energy.' },
+];
+
+const designPrinciples = [
+  'Adaptive public spaces',
+  'Biophilic integration',
+  'LEED Platinum certification',
+  'Climate-responsive facades',
+  'Human-scale ground planes',
+];
+
+const lifestyleItems = [
+  { title: 'Gastronomy', desc: 'Chef-driven concepts' },
+  { title: 'Wellness', desc: 'Mind and body sanctuaries' },
+  { title: 'Culture', desc: 'Gallery and performance' },
+  { title: 'Community', desc: 'Curated events' },
+];
+
+const areaOfInterestOptions = [
+  { value: '', label: 'Select area of interest' },
+  { value: 'residential', label: 'Residential' },
+  { value: 'commercial', label: 'Commercial' },
+  { value: 'retail', label: 'Retail' },
+  { value: 'investment', label: 'Investment' },
+  { value: 'general', label: 'General inquiry' },
 ];
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
-    nombre: '',
     email: '',
-    telefono: '',
-    consulta: '',
-    mensaje: '',
+    areaOfInterest: '',
   });
-  const [formState, setFormState] = useState('idle'); // idle | sending | sent | error
+  const [formState, setFormState] = useState('idle');
   const [visibleSections, setVisibleSections] = useState({});
 
   const handleSmoothScroll = (e, href) => {
@@ -82,7 +83,7 @@ export default function App() {
       { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
     );
 
-    ['masterplan', 'residencial', 'amenidades', 'ubicacion', 'contacto'].forEach((id) => {
+    ['vision', 'urban-scale', 'ecosystem', 'architecture', 'lifestyle', 'investment', 'contact'].forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
@@ -95,37 +96,31 @@ export default function App() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const validateForm = () => {
-    const { nombre, email, telefono, consulta, mensaje } = formData;
-    if (!nombre.trim()) return false;
-    if (!email.trim()) return false;
-    if (!telefono.trim()) return false;
-    if (!consulta) return false;
-    if (!mensaje.trim()) return false;
-    return true;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!formData.email.trim()) return;
 
     setFormState('sending');
     await new Promise((r) => setTimeout(r, 1500));
     setFormState('sent');
-    setFormData({ nombre: '', email: '', telefono: '', consulta: '', mensaje: '' });
-
+    setFormData({ email: '', areaOfInterest: '' });
     setTimeout(() => setFormState('idle'), 5000);
   };
 
+  const fadeIn = (id) =>
+    visibleSections[id]
+      ? 'opacity-100 translate-y-0'
+      : 'opacity-0 translate-y-8';
+
   return (
-    <div className="min-h-screen bg-white text-navy font-sans antialiased overflow-x-hidden">
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <div className="min-h-screen bg-dark text-white font-sans antialiased overflow-x-hidden">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
 
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 transition-all duration-300">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-dark/95 backdrop-blur-md border-b border-dark-border transition-all duration-300">
         <nav className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
-            <a href="#" onClick={(e) => handleSmoothScroll(e, '#hero')} className="text-2xl font-bold tracking-tight text-navy hover:text-forest transition-colors">
+            <a href="#" onClick={(e) => handleSmoothScroll(e, '#hero')} className="text-xl font-semibold tracking-tight text-white hover:text-gold transition-colors">
               VILLAGE
             </a>
 
@@ -135,15 +130,23 @@ export default function App() {
                   key={link.href}
                   href={link.href}
                   onClick={(e) => handleSmoothScroll(e, link.href)}
-                  className="text-sm font-medium text-slate-modern hover:text-forest transition-colors"
+                  className="text-xs font-medium tracking-widest text-gray-400 hover:text-white transition-colors uppercase"
                 >
                   {link.label}
                 </a>
               ))}
             </div>
 
+            <a
+              href="#contact"
+              onClick={(e) => handleSmoothScroll(e, '#contact')}
+              className="hidden md:inline-flex px-6 py-2.5 border border-gold text-white text-xs font-medium tracking-widest uppercase hover:bg-gold/10 transition-colors"
+            >
+              INQUIRE
+            </a>
+
             <button
-              className="md:hidden p-2 text-navy"
+              className="md:hidden p-2 text-white"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -153,282 +156,288 @@ export default function App() {
         </nav>
 
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-100 bg-white py-4 px-6">
+          <div className="md:hidden border-t border-dark-border bg-dark py-4 px-6">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={(e) => handleSmoothScroll(e, link.href)}
-                className="block py-2 text-slate-modern hover:text-forest font-medium"
+                className="block py-3 text-gray-400 hover:text-white font-medium tracking-widest uppercase"
               >
                 {link.label}
               </a>
             ))}
+            <a
+              href="#contact"
+              onClick={(e) => handleSmoothScroll(e, '#contact')}
+              className="block mt-4 py-3 text-gold font-medium tracking-widest uppercase"
+            >
+              INQUIRE
+            </a>
           </div>
         )}
       </header>
 
       {/* Hero */}
-      <section
-        id="hero"
-        className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden"
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy-dark to-slate-modern" />
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-20 left-10 w-96 h-96 bg-forest rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-10 w-80 h-80 bg-forest-light rounded-full blur-3xl" />
-        </div>
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAyNHYySDI0di0yaDEyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
-        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6 animate-fadeInUp">
-            Vive la innovación en Santiago
-          </h1>
-          <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto mb-12 animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
-            VILLAGE: donde la calidad de vida se encuentra con la modernidad
+      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url(https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=2074)`,
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/80 to-dark/40" />
+        <div className="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-32">
+          <p className="text-gray-400 text-sm tracking-[0.3em] uppercase mb-6 animate-fadeInUp">
+            Santiago de Chile
           </p>
-          <a
-            href="#masterplan"
-            onClick={(e) => handleSmoothScroll(e, '#masterplan')}
-            className="inline-flex items-center gap-2 px-10 py-4 bg-forest text-white font-semibold rounded-lg hover:bg-forest-light transition-all duration-300 shadow-lg hover:shadow-xl group animate-fadeInUp"
-            style={{ animationDelay: '0.4s' }}
-          >
-            Explorar Proyecto
-            <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-          </a>
+          <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.05] mb-8 animate-fadeInUp" style={{ animationDelay: '0.1s' }}>
+            <span className="text-white">A New Chapter</span>
+            <br />
+            <span className="text-gold">in Urban Living</span>
+          </h1>
+          <p className="text-lg md:text-xl text-gray-300 max-w-2xl mb-12 leading-relaxed animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
+            Village is not a building. It is the emergence of a new urban district—where architecture, culture, commerce, and community converge to redefine how we experience the city.
+          </p>
+          <div className="flex flex-wrap gap-4 animate-fadeInUp" style={{ animationDelay: '0.3s' }}>
+            <a
+              href="#vision"
+              onClick={(e) => handleSmoothScroll(e, '#vision')}
+              className="inline-flex items-center gap-2 px-8 py-4 bg-gold text-dark font-semibold text-xs tracking-widest uppercase hover:bg-gold-light transition-all duration-300"
+            >
+              Begin Your Journey
+            </a>
+            <a
+              href="#vision"
+              onClick={(e) => handleSmoothScroll(e, '#vision')}
+              className="inline-flex items-center gap-2 px-8 py-4 border border-gold text-white text-xs font-medium tracking-widest uppercase hover:bg-gold/10 transition-all duration-300"
+            >
+              Explore the Vision
+            </a>
+          </div>
         </div>
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="w-8 h-12 border-2 border-white/40 rounded-full flex justify-center pt-2">
-            <div className="w-1.5 h-3 bg-white/60 rounded-full" />
+        <a
+          href="#vision"
+          onClick={(e) => handleSmoothScroll(e, '#vision')}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-gray-500 text-xs tracking-[0.3em] uppercase hover:text-white transition-colors"
+        >
+          Discover
+        </a>
+      </section>
+
+      {/* The Vision */}
+      <section id="vision" className={`py-24 md:py-32 px-6 transition-all duration-700 ${fadeIn('vision')}`}>
+        <div className="max-w-7xl mx-auto">
+          <span className="text-gold text-xs font-semibold tracking-[0.3em] uppercase">The Vision</span>
+          <div className="grid lg:grid-cols-12 gap-12 mt-4 mb-16">
+            <h2 className="lg:col-span-5 font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+              Where the city <em className="italic">finds its soul</em>
+            </h2>
+            <div className="lg:col-span-7 space-y-6 text-gray-400 text-base md:text-lg leading-relaxed">
+              <p>
+                Village emerges as Santiago's answer to the world's most celebrated urban districts. A masterfully orchestrated composition of architecture, public space, and human experience that transcends conventional real estate to become a true urban destination.
+              </p>
+              <p>
+                Here, the boundaries between living, working, and leisure dissolve into a seamless choreography of daily life. This is not simply development—it is the deliberate creation of a place that will shape Santiago's identity for generations.
+              </p>
+            </div>
+          </div>
+          <div className="border-t border-dark-border pt-16">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+              {stats.map((stat, i) => (
+                <div key={stat.label}>
+                  <p className="font-serif text-4xl md:text-5xl font-bold text-gold">{stat.value}</p>
+                  <p className="text-gray-500 text-xs tracking-widest uppercase mt-2">{stat.label}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Masterplan */}
-      <section
-        id="masterplan"
-        className={`py-24 md:py-32 px-6 transition-all duration-700 ${visibleSections.masterplan ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
-      >
+      {/* Urban Scale */}
+      <section id="urban-scale" className={`py-24 md:py-32 px-6 bg-dark-lighter transition-all duration-700 ${fadeIn('urban-scale')}`}>
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <span className="inline-block text-forest font-semibold text-sm tracking-wider uppercase mb-4">El Proyecto</span>
-              <h2 className="text-4xl md:text-5xl font-bold text-navy mb-6 leading-tight">Masterplan</h2>
-              <p className="text-lg text-slate-modern leading-relaxed mb-6">
-                Un entorno cuidadosamente diseñado de 12 hectáreas donde conviven residencias premium, espacios verdes y amenidades de clase mundial. Ubicado en el corazón de Santiago.
-              </p>
-              <p className="text-slate-modern leading-relaxed">
-                Cada detalle ha sido pensado para ofrecerte una experiencia de vida excepcional: desde la ubicación privilegiada hasta la calidad de las terminaciones. VILLAGE no es solo un lugar donde vivir, es un estilo de vida.
-              </p>
-            </div>
-            <div className="relative">
-              <div className="aspect-[4/3] bg-gradient-to-br from-navy/10 to-forest/10 rounded-2xl border border-gray-200 overflow-hidden flex items-center justify-center">
-                <div className="text-center p-8">
-                  <MapPin className="mx-auto mb-4 text-forest" size={64} />
-                  <p className="text-navy font-semibold text-lg">Vista del Masterplan</p>
-                  <p className="text-slate-modern text-sm mt-2">Santiago, Chile</p>
-                  <div className="mt-6 grid grid-cols-2 gap-4 max-w-xs mx-auto">
-                    <div className="bg-white/80 rounded-lg p-3 shadow-sm">
-                      <p className="text-2xl font-bold text-forest">12</p>
-                      <p className="text-xs text-slate-modern">Hectáreas</p>
-                    </div>
-                    <div className="bg-white/80 rounded-lg p-3 shadow-sm">
-                      <p className="text-2xl font-bold text-forest">3</p>
-                      <p className="text-xs text-slate-modern">Torres</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Residencial */}
-      <section
-        id="residencial"
-        className="py-24 md:py-32 px-6 bg-gray-50"
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <span className="inline-block text-forest font-semibold text-sm tracking-wider uppercase mb-4">Residencial</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-navy mb-4">Nuestras Torres</h2>
-            <p className="text-lg text-slate-modern max-w-2xl mx-auto">Descubre las diferentes opciones que VILLAGE tiene para ti</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {torres.map((torre, i) => (
-              <div
-                key={torre.name}
-                className={`group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 border border-gray-100 ${visibleSections.residencial ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-                style={{ transitionDelay: `${i * 100}ms` }}
-              >
-                <div className={`h-48 bg-gradient-to-br ${torre.accent === 'forest' ? 'from-forest to-forest-dark' : 'from-navy to-navy-dark'} flex items-center justify-center`}>
-                  <span className="text-6xl text-white/30 font-bold">{String(i + 1).padStart(2, '0')}</span>
-                </div>
-                <div className="p-8">
-                  <h3 className="text-xl font-bold text-navy mb-2">{torre.name}</h3>
-                  <p className="text-slate-modern mb-4">{torre.desc}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="px-3 py-1 bg-forest/10 text-forest text-sm rounded-full">{torre.hab}</span>
-                  </div>
-                  <p className="text-navy font-bold text-lg">Desde {torre.desde}</p>
-                  <a
-                    href="#contacto"
-                    onClick={(e) => handleSmoothScroll(e, '#contacto')}
-                    className="inline-flex items-center gap-2 mt-4 text-forest font-semibold hover:gap-3 transition-all"
-                  >
-                    Más información
-                    <ArrowRight size={16} />
-                  </a>
-                </div>
+          <span className="text-gold text-xs font-semibold tracking-[0.3em] uppercase">Urban Scale</span>
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white mt-4 mb-12 leading-tight">
+            A City Within the City
+          </h2>
+          <p className="text-gray-400 text-lg max-w-3xl mb-16 leading-relaxed">
+            Village occupies a privileged position at the nexus of Santiago's most dynamic corridors. Its masterplan is conceived not as isolated structures, but as an integrated urban fabric—a complete neighborhood with its own rhythm, its own identity, its own gravitational pull.
+          </p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {strategicItems.map((item) => (
+              <div key={item.title} className="border-l border-gold/50 pl-6">
+                <h3 className="text-white font-semibold mb-2">{item.title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Amenidades */}
-      <section
-        id="amenidades"
-        className="py-24 md:py-32 px-6"
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <span className="inline-block text-forest font-semibold text-sm tracking-wider uppercase mb-4">Amenidades</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-navy mb-4">Vida premium</h2>
-            <p className="text-lg text-slate-modern max-w-2xl mx-auto">Todo lo que necesitas para una vida moderna y equilibrada</p>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {amenidades.map((item, i) => (
-              <div
-                key={item.title}
-                className={`p-6 rounded-xl border border-gray-200 bg-white hover:border-forest/30 hover:shadow-lg transition-all duration-300 group ${visibleSections.amenidades ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
-                style={{ transitionDelay: `${i * 50}ms` }}
-              >
-                <span className="text-3xl mb-3 block">{item.icon}</span>
-                <h3 className="font-bold text-navy mb-1 group-hover:text-forest transition-colors">{item.title}</h3>
-                <p className="text-sm text-slate-modern">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Ubicación */}
-      <section
-        id="ubicacion"
-        className="py-24 md:py-32 px-6 bg-navy text-white"
-      >
+      {/* The Ecosystem */}
+      <section id="ecosystem" className={`py-24 md:py-32 px-6 transition-all duration-700 ${fadeIn('ecosystem')}`}>
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <span className="inline-block text-forest-light font-semibold text-sm tracking-wider uppercase mb-4">Ubicación</span>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">En el corazón de Santiago</h2>
-              <p className="text-white/90 text-lg leading-relaxed mb-8">
-                VILLAGE está ubicado en una de las zonas más privilegiadas de Santiago, con excelente conectividad y cercanía a los principales centros comerciales, colegios, clínicas y zonas de esparcimiento.
+              <span className="text-gold text-xs font-semibold tracking-[0.3em] uppercase">The Ecosystem</span>
+              <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white mt-4 mb-6 leading-tight">
+                Live. Work. <em className="italic text-gold">Discover.</em>
+              </h2>
+              <p className="text-gray-400 text-lg mb-12 leading-relaxed">
+                Village dissolves the artificial barriers between how we live and how we spend our time. Within steps, transition from home to office, from café to gallery, from solitude to celebration.
               </p>
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <MapPin size={24} className="text-forest flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold">Av. Las Condes 12.000</p>
-                    <p className="text-white/80 text-sm">Las Condes, Santiago</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 flex items-center justify-center">
-                    <span className="text-forest">⏱</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold">Proximidad</p>
-                    <p className="text-white/80 text-sm">10 min Costanera Center • 5 min Mall Plaza • 8 min Clínica Alemana</p>
-                  </div>
-                </div>
+              <div className="space-y-8">
+                {ecosystemItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <div key={item.title} className="flex gap-4">
+                      <div className="flex-shrink-0 w-10 h-10 border border-gold/50 flex items-center justify-center">
+                        <Icon size={18} className="text-gold" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-semibold mb-1">{item.title}</h3>
+                        <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
             <div className="relative">
-              <div className="aspect-square bg-white/5 rounded-2xl border border-white/10 flex items-center justify-center">
-                <MapPin size={120} className="text-forest/40" />
-                <p className="absolute text-white/60 text-sm">Zona Las Condes, Santiago</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contacto */}
-      <section
-        id="contacto"
-        className="py-24 md:py-32 px-6 bg-gray-50"
-      >
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-12">
-            <span className="inline-block text-forest font-semibold text-sm tracking-wider uppercase mb-4">Contacto</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-navy mb-4">¿Listo para conocer VILLAGE?</h2>
-            <p className="text-lg text-slate-modern">Completa el formulario y nos pondremos en contacto contigo</p>
-          </div>
-
-          {formState === 'sent' ? (
-            <div className="bg-forest/10 border border-forest/30 rounded-2xl p-12 text-center">
-              <div className="w-16 h-16 bg-forest rounded-full flex items-center justify-center mx-auto mb-4">
-                <Check size={32} className="text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-navy mb-2">¡Mensaje enviado!</h3>
-              <p className="text-slate-modern">Gracias por contactarnos. Un asesor se comunicará contigo pronto.</p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid sm:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="nombre" className="block text-sm font-medium text-navy mb-2">Nombre completo</label>
-                  <input
-                    type="text"
-                    id="nombre"
-                    name="nombre"
-                    value={formData.nombre}
-                    onChange={handleFormChange}
-                    required
-                    placeholder="Tu nombre"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-forest focus:ring-2 focus:ring-forest/20 outline-none transition-all bg-white"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-navy mb-2">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleFormChange}
-                    required
-                    placeholder="tu@email.com"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-forest focus:ring-2 focus:ring-forest/20 outline-none transition-all bg-white"
-                  />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="telefono" className="block text-sm font-medium text-navy mb-2">Teléfono</label>
-                <input
-                  type="tel"
-                  id="telefono"
-                  name="telefono"
-                  value={formData.telefono}
-                  onChange={handleFormChange}
-                  required
-                  placeholder="+56 9 1234 5678"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-forest focus:ring-2 focus:ring-forest/20 outline-none transition-all bg-white"
+              <div className="aspect-[4/5] bg-dark-lighter border border-dark-border overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069"
+                  alt="Village workspaces"
+                  className="w-full h-full object-cover"
                 />
               </div>
+              <div className="absolute bottom-6 right-6 bg-dark/90 backdrop-blur px-6 py-4 max-w-xs">
+                <p className="text-white font-serif italic text-lg">"The city's new gravitational center"</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Architecture & Design */}
+      <section id="architecture" className={`py-24 md:py-32 px-6 bg-dark-lighter transition-all duration-700 ${fadeIn('architecture')}`}>
+        <div className="max-w-7xl mx-auto">
+          <span className="text-gold text-xs font-semibold tracking-[0.3em] uppercase">Architecture & Design</span>
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white mt-4 mb-8 leading-tight">
+            Icons do not imitate. <em className="italic">They define.</em>
+          </h2>
+          <p className="text-gray-400 text-lg max-w-3xl mb-12 leading-relaxed">
+            Village's architecture emerges from a singular conviction: that great buildings serve as more than shelter—they become landmarks of collective memory, markers of a city's ambition, and catalysts for the life that unfolds around them.
+          </p>
+          <p className="text-gray-400 leading-relaxed mb-12">
+            World-renowned architectural practices have been engaged to create a cohesive yet diverse urban landscape. Each tower, each plaza, each passage has been conceived as both individual expression and contribution to the greater whole.
+          </p>
+          <div>
+            <h3 className="text-white font-semibold mb-4">Design Principles</h3>
+            <ul className="space-y-2">
+              {designPrinciples.map((item) => (
+                <li key={item} className="flex items-center gap-3 text-gray-400">
+                  <span className="w-1 h-1 bg-gold rounded-full" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* The Lifestyle */}
+      <section id="lifestyle" className={`py-24 md:py-32 px-6 transition-all duration-700 ${fadeIn('lifestyle')}`}>
+        <div className="max-w-7xl mx-auto">
+          <span className="text-gold text-xs font-semibold tracking-[0.3em] uppercase">The Lifestyle</span>
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white mt-4 mb-12 leading-tight">
+            Where every moment matters
+          </h2>
+          <p className="text-gray-400 text-lg max-w-3xl mb-16 leading-relaxed">
+            Village is alive. From dawn yoga on terraced gardens to late-night conversations at intimate wine bars, the district pulses with an energy that belongs to the world's great urban destinations.
+          </p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {lifestyleItems.map((item) => (
+              <div key={item.title} className="border border-dark-border p-8 hover:border-gold/50 transition-colors">
+                <h3 className="text-white font-semibold text-lg mb-2">{item.title}</h3>
+                <p className="text-gray-500 text-sm">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Investment Vision */}
+      <section id="investment" className={`py-24 md:py-32 px-6 bg-dark-lighter transition-all duration-700 ${fadeIn('investment')}`}>
+        <div className="max-w-7xl mx-auto">
+          <span className="text-gold text-xs font-semibold tracking-[0.3em] uppercase">Investment Vision</span>
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white mt-4 mb-12 leading-tight">
+            Build wealth. <em className="italic text-gold">Build legacy.</em>
+          </h2>
+          <p className="text-gray-400 text-lg max-w-3xl mb-16 leading-relaxed">
+            Village represents a rare convergence of factors that sophisticated investors recognize: irreplaceable location, institutional-quality development, emerging district premiums, and the structural appreciation that follows transformative urban projects worldwide.
+          </p>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div>
+              <h3 className="text-white font-semibold mb-3">Strategic Appreciation</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">
+                First-mover advantage in Santiago's next premier address. District-level appreciation historically outperforms isolated developments.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-white font-semibold mb-3">Diversified Revenue</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">
+                Multiple asset classes within a single investment ecosystem. Residential, commercial, and retail opportunities under unified management.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-white font-semibold mb-3">Institutional Quality</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">
+                International development standards. World-class architecture. Professional asset management. Transparent governance structures.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Join / Contact */}
+      <section id="contact" className={`py-24 md:py-32 px-6 transition-all duration-700 ${fadeIn('contact')}`}>
+        <div className="max-w-2xl mx-auto text-center">
+          <span className="text-gold text-xs font-semibold tracking-[0.3em] uppercase">Begin</span>
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white mt-4 mb-6 leading-tight">
+            Join the future <em className="italic">of Santiago</em>
+          </h2>
+          <p className="text-gray-400 text-lg mb-12">
+            Register your interest to receive exclusive project updates, priority access to releases, and invitations to private presentations.
+          </p>
+          <blockquote className="font-serif italic text-gold text-xl mb-16">
+            "This is not a project. This is the city we've been waiting for."
+          </blockquote>
+
+          {formState === 'sent' ? (
+            <div className="bg-dark-lighter border border-gold/50 p-12">
+              <div className="w-16 h-16 bg-gold rounded-full flex items-center justify-center mx-auto mb-4">
+                <Check size={32} className="text-dark" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-2">Thank you</h3>
+              <p className="text-gray-400">We'll be in touch with exclusive updates and invitations.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="text-left space-y-6">
               <div>
-                <label htmlFor="consulta" className="block text-sm font-medium text-navy mb-2">Tipo de consulta</label>
+                <label htmlFor="areaOfInterest" className="block text-sm font-medium text-gray-400 mb-2 uppercase tracking-wider">
+                  Area of Interest
+                </label>
                 <select
-                  id="consulta"
-                  name="consulta"
-                  value={formData.consulta}
+                  id="areaOfInterest"
+                  name="areaOfInterest"
+                  value={formData.areaOfInterest}
                   onChange={handleFormChange}
-                  required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-forest focus:ring-2 focus:ring-forest/20 outline-none transition-all bg-white"
+                  className="w-full px-4 py-3 bg-dark-lighter border border-dark-border text-white focus:border-gold focus:outline-none transition-colors"
                 >
-                  {consultaOptions.map((opt) => (
+                  {areaOfInterestOptions.map((opt) => (
                     <option key={opt.value} value={opt.value}>
                       {opt.label}
                     </option>
@@ -436,72 +445,60 @@ export default function App() {
                 </select>
               </div>
               <div>
-                <label htmlFor="mensaje" className="block text-sm font-medium text-navy mb-2">Mensaje</label>
-                <textarea
-                  id="mensaje"
-                  name="mensaje"
-                  value={formData.mensaje}
+                <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2 uppercase tracking-wider">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
                   onChange={handleFormChange}
                   required
-                  rows="5"
-                  placeholder="Cuéntanos en qué podemos ayudarte..."
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-forest focus:ring-2 focus:ring-forest/20 outline-none transition-all resize-none bg-white"
+                  placeholder="your@email.com"
+                  className="w-full px-4 py-3 bg-dark-lighter border border-dark-border text-white placeholder-gray-600 focus:border-gold focus:outline-none transition-colors"
                 />
               </div>
               <button
                 type="submit"
                 disabled={formState === 'sending'}
-                className="w-full py-4 bg-forest text-white font-semibold rounded-lg hover:bg-forest-light transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full py-4 bg-gold text-dark font-semibold text-sm tracking-widest uppercase hover:bg-gold-light transition-all disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {formState === 'sending' ? (
-                  <>
-                    <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Enviando...
-                  </>
+                  <span className="inline-flex items-center gap-2">
+                    <span className="w-4 h-4 border-2 border-dark/30 border-t-dark rounded-full animate-spin" />
+                    Sending...
+                  </span>
                 ) : (
-                  <>
-                    Enviar mensaje
-                    <ArrowRight size={20} />
-                  </>
+                  'Request Information'
                 )}
               </button>
+              <p className="text-gray-500 text-xs text-center">
+                By submitting, you agree to receive communications from Village Santiago.
+              </p>
             </form>
           )}
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-navy text-white py-16 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-            <div className="text-2xl font-bold">VILLAGE</div>
-            <div className="flex gap-10">
-              <a href="#masterplan" onClick={(e) => handleSmoothScroll(e, '#masterplan')} className="hover:text-forest-light transition-colors">Masterplan</a>
-              <a href="#residencial" onClick={(e) => handleSmoothScroll(e, '#residencial')} className="hover:text-forest-light transition-colors">Residencial</a>
-              <a href="#amenidades" onClick={(e) => handleSmoothScroll(e, '#amenidades')} className="hover:text-forest-light transition-colors">Amenidades</a>
-              <a href="#ubicacion" onClick={(e) => handleSmoothScroll(e, '#ubicacion')} className="hover:text-forest-light transition-colors">Ubicación</a>
-              <a href="#contacto" onClick={(e) => handleSmoothScroll(e, '#contacto')} className="hover:text-forest-light transition-colors">Contacto</a>
-            </div>
+      <footer className="border-t border-dark-border py-12 px-6">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+          <span className="text-xl font-semibold text-white">VILLAGE</span>
+          <div className="flex items-center gap-8">
+            <a href="mailto:contacto@village.cl" className="flex items-center gap-2 text-gray-500 hover:text-gold transition-colors text-sm">
+              <Mail size={16} />
+              contacto@village.cl
+            </a>
+            <a href="tel:+56221234567" className="flex items-center gap-2 text-gray-500 hover:text-gold transition-colors text-sm">
+              <Phone size={16} />
+              +56 2 2123 4567
+            </a>
           </div>
-          <div className="mt-12 pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="flex items-center gap-6">
-              <a href="mailto:contacto@village.cl" className="flex items-center gap-2 hover:text-forest-light transition-colors">
-                <Mail size={18} />
-                contacto@village.cl
-              </a>
-              <a href="tel:+56221234567" className="flex items-center gap-2 hover:text-forest-light transition-colors">
-                <Phone size={18} />
-                +56 2 2123 4567
-              </a>
-            </div>
-            <div className="flex gap-6">
-              <a href="#" className="hover:text-forest-light transition-colors" aria-label="Instagram">Instagram</a>
-              <a href="#" className="hover:text-forest-light transition-colors" aria-label="LinkedIn">LinkedIn</a>
-              <a href="#" className="hover:text-forest-light transition-colors" aria-label="Facebook">Facebook</a>
-            </div>
-          </div>
-          <p className="mt-8 text-center text-white/60 text-sm">© {new Date().getFullYear()} VILLAGE Santiago. Todos los derechos reservados.</p>
         </div>
+        <p className="mt-8 text-center text-gray-600 text-sm">
+          © {new Date().getFullYear()} Village Santiago. All rights reserved.
+        </p>
       </footer>
 
       <style>{`

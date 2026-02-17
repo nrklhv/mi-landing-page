@@ -5,22 +5,20 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        navy: {
-          DEFAULT: '#1a3a52',
-          dark: '#142d3f',
-          light: '#2d4a63',
+        dark: {
+          DEFAULT: '#151515',
+          lighter: '#1a1a1a',
+          border: '#2a2a2a',
         },
-        slate: {
-          modern: '#2d3e50',
-        },
-        forest: {
-          DEFAULT: '#2d5a3d',
-          light: '#3d7a52',
-          dark: '#1e3d29',
+        gold: {
+          DEFAULT: '#BFA87E',
+          light: '#D4C4A0',
+          dark: '#9A8550',
         },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        serif: ['Playfair Display', 'Georgia', 'serif'],
       },
     },
   },
